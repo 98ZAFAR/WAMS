@@ -41,12 +41,10 @@ const supplierSupplySchema = new mongoose.Schema(
   }
 );
 
-supplierSupplySchema.pre('validate', function (next) {
+supplierSupplySchema.pre('validate', function () {
   if (typeof this.quantity === 'number' && typeof this.unitCost === 'number') {
     this.totalCost = this.quantity * this.unitCost;
   }
-
-  next();
 });
 
 module.exports = mongoose.model('SupplierSupply', supplierSupplySchema);

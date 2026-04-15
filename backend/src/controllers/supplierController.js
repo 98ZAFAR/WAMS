@@ -3,6 +3,11 @@ const User = require('../models/User');
 const Product = require('../models/Product');
 const SupplierSupply = require('../models/SupplierSupply');
 
+const isTransactionNotSupportedError = (error) => {
+  const message = String(error?.message || '');
+  return message.includes('Transaction numbers are only allowed on a replica set member or mongos');
+};
+
 const getSupplierProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.userId).select('-password');
@@ -127,12 +132,73 @@ const getSupplies = async (req, res) => {
   }
 };
 
+const updateSupplyStatusWithoutTransaction = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid supply request id' });
+    }
+
+    if (!['Approved', 'Received', 'Rejected'].includes(status)) {
+      return res.status(400).json({ message: 'status must be one of Approved, Received, Rejected' });
+    }
+
+    const supply = await SupplierSupply.findById(id);
+
+    if (!supply) {
+      return res.status(404).json({ message: 'Supply request not found' });
+    }
+
+    if (status === 'Approved' && supply.status !== 'Pending') {
+      return res.status(400).json({ message: 'Only Pending requests can be approved' });
+    }
+
+    if (status === 'Rejected' && supply.status === 'Received') {
+      return res.status(400).json({ message: 'Received requests cannot be rejected' });
+    }
+
+    if (status === 'Received') {
+      if (supply.status !== 'Approved') {
+        return res.status(400).json({ message: 'Only Approved requests can be marked as Received' });
+      }
+
+      await Product.findByIdAndUpdate(
+        supply.product,
+        {
+          $inc: { currentStock: supply.quantity }
+        },
+        {
+          new: true,
+          runValidators: true
+        }
+      );
+    }
+
+    supply.status = status;
+    await supply.save();
+
+    const updatedSupply = await SupplierSupply.findById(supply._id)
+      .populate('supplier', 'name email businessName')
+      .populate('product', 'name type currentStock minThreshold');
+
+    return res.status(200).json({ message: 'Supply status updated successfully', supply: updatedSupply });
+  } catch (error) {
+    return res.status(500).json({ message: error.message || 'Failed to update supply status' });
+  }
+};
+
 const updateSupplyStatus = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
     const { id } = req.params;
     const { status } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid supply request id' });
+    }
 
     if (!['Approved', 'Received', 'Rejected'].includes(status)) {
       return res.status(400).json({ message: 'status must be one of Approved, Received, Rejected' });
@@ -189,6 +255,10 @@ const updateSupplyStatus = async (req, res) => {
   } catch (error) {
     if (session.inTransaction()) {
       await session.abortTransaction();
+    }
+
+    if (isTransactionNotSupportedError(error)) {
+      return updateSupplyStatusWithoutTransaction(req, res);
     }
 
     return res.status(500).json({ message: error.message || 'Failed to update supply status' });
