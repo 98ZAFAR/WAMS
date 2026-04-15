@@ -9,7 +9,7 @@ import {
   saveSession,
 } from "@/lib/auth-storage";
 import type { AuthUser } from "@/lib/types";
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useMemo, useState, useSyncExternalStore } from "react";
 
 type AuthContextValue = {
   token: string | null;
@@ -21,6 +21,10 @@ type AuthContextValue = {
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
+
+const subscribeHydration = () => {
+  return () => undefined;
+};
 
 const readInitialSession = () => {
   const token = readToken();
@@ -41,28 +45,50 @@ const readInitialSession = () => {
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [session, setSession] = useState(readInitialSession);
+  const [sessionOverride, setSessionOverride] = useState<{
+    token: string | null;
+    user: AuthUser | null;
+  } | null>(null);
+
+  const isHydrated = useSyncExternalStore(
+    subscribeHydration,
+    () => true,
+    () => false,
+  );
+
+  const persistedSession = useMemo(() => {
+    if (!isHydrated) {
+      return {
+        token: null as string | null,
+        user: null as AuthUser | null,
+      };
+    }
+
+    return readInitialSession();
+  }, [isHydrated]);
+
+  const activeSession = sessionOverride ?? persistedSession;
 
   const setAuthSession = useCallback((nextToken: string, nextUser: AuthUser) => {
     saveSession(nextToken, nextUser);
-    setSession({ token: nextToken, user: nextUser });
+    setSessionOverride({ token: nextToken, user: nextUser });
   }, []);
 
   const logout = useCallback(() => {
     clearSession();
-    setSession({ token: null, user: null });
+    setSessionOverride({ token: null, user: null });
   }, []);
 
   const value = useMemo<AuthContextValue>(() => {
     return {
-      token: session.token,
-      user: session.user,
-      isReady: true,
-      isAuthenticated: Boolean(session.token && session.user),
+      token: activeSession.token,
+      user: activeSession.user,
+      isReady: isHydrated,
+      isAuthenticated: Boolean(activeSession.token && activeSession.user),
       setAuthSession,
       logout,
     };
-  }, [logout, session.token, session.user, setAuthSession]);
+  }, [activeSession.token, activeSession.user, isHydrated, logout, setAuthSession]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
