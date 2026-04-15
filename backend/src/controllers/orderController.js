@@ -10,6 +10,11 @@ const buildError = (status, message) => {
   return error;
 };
 
+const isTransactionNotSupportedError = (error) => {
+  const message = String(error?.message || '');
+  return message.includes('Transaction numbers are only allowed on a replica set member or mongos');
+};
+
 const buildOrderItemsFromRequest = async (requestedItems) => {
   const productIds = requestedItems.map((item) => item.product);
   const products = await Product.find({ _id: { $in: productIds } });
@@ -91,6 +96,19 @@ const getDealerOrders = async (req, res) => {
   }
 };
 
+const getAllOrders = async (req, res) => {
+  try {
+    const orders = await Order.find()
+      .populate('dealer', 'name email businessName')
+      .populate('items.product', 'name type price')
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json(orders);
+  } catch (error) {
+    return res.status(500).json({ message: error.message || 'Failed to fetch all orders' });
+  }
+};
+
 const addQuote = async (req, res) => {
   try {
     const { id } = req.params;
@@ -156,6 +174,85 @@ const addQuote = async (req, res) => {
     return res.status(200).json({ message: 'Quote attached successfully', order });
   } catch (error) {
     return res.status(error.status || 500).json({ message: error.message || 'Failed to attach quote' });
+  }
+};
+
+const approveOrderWithoutTransaction = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw buildError(400, 'Invalid order id');
+    }
+
+    const order = await Order.findById(id);
+
+    if (!order) {
+      throw buildError(404, 'Order not found');
+    }
+
+    if (String(order.dealer) !== String(req.user.userId)) {
+      throw buildError(403, 'You can only approve your own order');
+    }
+
+    if (order.status !== 'Quoted') {
+      throw buildError(400, 'Only Quoted orders can be approved');
+    }
+
+    const lowStockProducts = [];
+
+    for (const item of order.items) {
+      const updatedProduct = await Product.findOneAndUpdate(
+        {
+          _id: item.product,
+          currentStock: { $gte: item.quantity }
+        },
+        {
+          $inc: { currentStock: -item.quantity }
+        },
+        {
+          new: true
+        }
+      );
+
+      if (!updatedProduct) {
+        throw buildError(400, `Insufficient stock for product ${item.product}`);
+      }
+
+      if (updatedProduct.currentStock < updatedProduct.minThreshold) {
+        lowStockProducts.push({
+          productId: updatedProduct._id,
+          productName: updatedProduct.name,
+          currentStock: updatedProduct.currentStock,
+          minThreshold: updatedProduct.minThreshold
+        });
+      }
+    }
+
+    order.status = 'Approved';
+    await order.save();
+
+    const invoice = await Invoice.create({
+      order: order._id,
+      billingDate: new Date(),
+      paymentStatus: 'Pending'
+    });
+
+    for (const product of lowStockProducts) {
+      await sendAlert(product);
+    }
+
+    const populatedOrder = await Order.findById(order._id)
+      .populate('dealer', 'name email businessName')
+      .populate('items.product', 'name type price');
+
+    return res.status(200).json({
+      message: 'Order approved successfully and invoice generated',
+      order: populatedOrder,
+      invoice
+    });
+  } catch (error) {
+    return res.status(error.status || 500).json({ message: error.message || 'Failed to approve order' });
   }
 };
 
@@ -250,6 +347,10 @@ const approveOrder = async (req, res) => {
       await session.abortTransaction();
     }
 
+    if (isTransactionNotSupportedError(error)) {
+      return approveOrderWithoutTransaction(req, res);
+    }
+
     return res.status(error.status || 500).json({ message: error.message || 'Failed to approve order' });
   } finally {
     await session.endSession();
@@ -258,6 +359,7 @@ const approveOrder = async (req, res) => {
 
 module.exports = {
   requestOrder,
+  getAllOrders,
   getDealerOrders,
   addQuote,
   approveOrder

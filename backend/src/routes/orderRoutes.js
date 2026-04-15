@@ -1,6 +1,7 @@
 const express = require('express');
 const {
   requestOrder,
+  getAllOrders,
   getDealerOrders,
   addQuote,
   approveOrder
@@ -12,6 +13,7 @@ const router = express.Router();
 
 router.use(verifyToken);
 
+router.get('/', requireRole(['Admin']), getAllOrders);
 router.post('/request', requireRole(['Dealer']), requestOrder);
 router.get('/dealer/:id', requireRole(['Dealer', 'Admin']), getDealerOrders);
 router.put('/:id/quote', requireRole(['Admin']), addQuote);
