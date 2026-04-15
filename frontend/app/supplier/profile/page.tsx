@@ -87,37 +87,37 @@ export default function SupplierProfilePage() {
       title="Supplier Profile"
       subtitle="Maintain contact and business details used by admin supply workflows."
     >
-      <section className="surface" style={{ maxWidth: "720px", padding: "1rem" }}>
-        {loading ? <p className="text-soft">Loading profile...</p> : null}
-        {error ? <div className="message error">{error}</div> : null}
-        {success ? <div className="message success">{success}</div> : null}
+      <section className="w-full max-w-3xl rounded-2xl border border-[#d8d0c8]/60 bg-white p-4 shadow-[0_2px_16px_rgba(58,48,42,0.04)] md:p-5">
+        {loading ? <p className="text-sm text-[#605850]">Loading profile...</p> : null}
+        {error ? <div className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</div> : null}
+        {success ? <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{success}</div> : null}
 
-        <form onSubmit={handleSubmit} className="stack-md" style={{ marginTop: "0.7rem" }}>
-          <div className="field">
+        <form onSubmit={handleSubmit} className="mt-3 space-y-4">
+          <div className="space-y-2">
             <label htmlFor="name">Name</label>
-            <input id="name" className="input" value={name} onChange={(event) => setName(event.target.value)} required />
+            <input id="name" className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20" value={name} onChange={(event) => setName(event.target.value)} required />
           </div>
-          <div className="field">
+          <div className="space-y-2">
             <label htmlFor="businessName">Business Name</label>
             <input
               id="businessName"
-              className="input"
+              className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20"
               value={businessName}
               onChange={(event) => setBusinessName(event.target.value)}
               required
             />
           </div>
-          <div className="field">
+          <div className="space-y-2">
             <label htmlFor="contactInfo">Contact Info</label>
             <input
               id="contactInfo"
-              className="input"
+              className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20"
               value={contactInfo}
               onChange={(event) => setContactInfo(event.target.value)}
             />
           </div>
 
-          <button type="submit" className="btn btn-primary" disabled={submitting}>
+          <button type="submit" className="inline-flex items-center justify-center rounded-lg bg-[#c2652a] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60" disabled={submitting}>
             {submitting ? "Updating..." : "Update Profile"}
           </button>
         </form>
@@ -125,3 +125,4 @@ export default function SupplierProfilePage() {
     </AppShell>
   );
 }
+

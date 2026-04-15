@@ -116,18 +116,18 @@ export default function SupplierProductionPage() {
       title="Production Orders"
       subtitle="Create raw-material supply requests and track lifecycle status."
     >
-      {error ? <div className="message error">{error}</div> : null}
-      {success ? <div className="message success">{success}</div> : null}
+      {error ? <div className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</div> : null}
+      {success ? <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{success}</div> : null}
 
-      <section className="split-grid">
-        <article className="surface" style={{ padding: "1rem" }}>
-          <h2 className="headline" style={{ fontSize: "1.45rem" }}>
+      <section className="grid gap-6 xl:grid-cols-[2fr_1fr]">
+        <article className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-4 shadow-[0_2px_16px_rgba(58,48,42,0.04)] md:p-5">
+          <h2 className="font-serif text-2xl font-bold text-[#3a302a]">
             New Supply Request
           </h2>
-          <form className="stack-md" style={{ marginTop: "0.8rem" }} onSubmit={submitSupplyRequest}>
-            <div className="field">
+          <form className="mt-3 space-y-4" onSubmit={submitSupplyRequest}>
+            <div className="space-y-2">
               <label htmlFor="product">Raw Material Product</label>
-              <select id="product" className="select" value={product} onChange={(event) => setProduct(event.target.value)}>
+              <select id="product" className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20" value={product} onChange={(event) => setProduct(event.target.value)}>
                 <option value="">Select Raw Material</option>
                 {rawMaterials.map((item) => (
                   <option key={item._id} value={item._id}>
@@ -136,11 +136,11 @@ export default function SupplierProductionPage() {
                 ))}
               </select>
             </div>
-            <div className="field">
+            <div className="space-y-2">
               <label htmlFor="quantity">Quantity</label>
               <input
                 id="quantity"
-                className="input"
+                className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20"
                 type="number"
                 min={1}
                 value={quantity}
@@ -148,11 +148,11 @@ export default function SupplierProductionPage() {
                 required
               />
             </div>
-            <div className="field">
+            <div className="space-y-2">
               <label htmlFor="unitCost">Unit Cost</label>
               <input
                 id="unitCost"
-                className="input"
+                className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20"
                 type="number"
                 min={0}
                 step="0.01"
@@ -161,32 +161,32 @@ export default function SupplierProductionPage() {
                 required
               />
             </div>
-            <div className="field">
+            <div className="space-y-2">
               <label htmlFor="eta">Expected Delivery Date</label>
               <input
                 id="eta"
-                className="input"
+                className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20"
                 type="date"
                 value={expectedDeliveryDate}
                 onChange={(event) => setExpectedDeliveryDate(event.target.value)}
               />
             </div>
 
-            <button type="submit" className="btn btn-primary" disabled={submitting}>
+            <button type="submit" className="inline-flex items-center justify-center rounded-lg bg-[#c2652a] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60" disabled={submitting}>
               {submitting ? "Submitting..." : "Create Supply Request"}
             </button>
           </form>
         </article>
 
-        <article className="surface" style={{ padding: "1rem" }}>
-          <h2 className="headline" style={{ fontSize: "1.45rem" }}>
+        <article className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-4 shadow-[0_2px_16px_rgba(58,48,42,0.04)] md:p-5">
+          <h2 className="font-serif text-2xl font-bold text-[#3a302a]">
             System Optimization
           </h2>
-          <div className="field" style={{ marginTop: "0.7rem" }}>
+          <div className="mt-3 space-y-2">
             <label htmlFor="statusFilter">Status Filter</label>
             <select
               id="statusFilter"
-              className="select"
+              className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20"
               value={statusFilter}
               onChange={(event) => setStatusFilter(event.target.value)}
             >
@@ -197,20 +197,20 @@ export default function SupplierProductionPage() {
               <option value="Rejected">Rejected</option>
             </select>
           </div>
-          <p className="text-soft" style={{ marginTop: "0.6rem" }}>
+          <p className="mt-3 text-sm text-[#605850]">
             Only admin can advance request status to Approved/Received/Rejected.
           </p>
         </article>
       </section>
 
-      <section className="surface" style={{ padding: "1rem" }}>
+      <section className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-4 shadow-[0_2px_16px_rgba(58,48,42,0.04)] md:p-5">
         {loading ? (
-          <p className="text-soft">Loading production orders...</p>
+          <p className="text-sm text-[#605850]">Loading production orders...</p>
         ) : supplies.length === 0 ? (
-          <div className="empty-state">No production orders found.</div>
+          <div className="rounded-xl border border-dashed border-[#d8d0c8] bg-[#faf5ee] px-4 py-6 text-sm text-[#78706a]">No production orders found.</div>
         ) : (
-          <div className="table-wrap">
-            <table>
+          <div className="overflow-x-auto rounded-xl border border-[#d8d0c8]/70">
+            <table className="min-w-full text-sm">
               <thead>
                 <tr>
                   <th>Order ID</th>
@@ -244,3 +244,4 @@ export default function SupplierProductionPage() {
     </AppShell>
   );
 }
+

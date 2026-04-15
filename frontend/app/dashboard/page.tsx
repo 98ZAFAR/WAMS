@@ -23,10 +23,11 @@ export default function DashboardRedirectPage() {
   }, [isAuthenticated, isReady, router, user]);
 
   return (
-    <main className="page-wrap" style={{ padding: "2rem 0" }}>
-      <div className="surface" style={{ padding: "1rem" }}>
+    <main className="mx-auto w-full max-w-7xl px-4 py-8 md:px-8">
+      <div className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-4 shadow-[0_2px_16px_rgba(58,48,42,0.04)]">
         Redirecting to your dashboard...
       </div>
     </main>
   );
 }
+

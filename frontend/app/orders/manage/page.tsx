@@ -144,50 +144,42 @@ export default function OrdersManagementPage() {
       title="Order Management"
       subtitle="All orders are shown here across every status, with quote control for pending ones."
     >
-      <section className="surface" style={{ padding: "1rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: "0.6rem", flexWrap: "wrap" }}>
-          <p className="text-soft">Total orders: {orders.length}</p>
-          <button type="button" className="btn btn-secondary" onClick={() => void loadOrders()} disabled={loading}>
+      <section className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-4 shadow-[0_2px_16px_rgba(58,48,42,0.04)] md:p-5">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="text-sm text-[#605850]">Total orders: {orders.length}</p>
+          <button type="button" className="inline-flex items-center justify-center rounded-lg border border-[#d8d0c8] bg-white px-4 py-2 text-sm font-semibold text-[#3a302a] transition hover:bg-[#f2ece4] disabled:cursor-not-allowed disabled:opacity-60" onClick={() => void loadOrders()} disabled={loading}>
             {loading ? "Refreshing..." : "Refresh Orders"}
           </button>
         </div>
 
-        {error ? <div className="message error" style={{ marginTop: "0.7rem" }}>{error}</div> : null}
-        {success ? <div className="message success" style={{ marginTop: "0.7rem" }}>{success}</div> : null}
+        {error ? <div className="mt-3 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</div> : null}
+        {success ? <div className="mt-3 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{success}</div> : null}
 
-        <div className="stack-md" style={{ marginTop: "0.9rem" }}>
+        <div className="mt-4 space-y-4">
           {orders.length === 0 ? (
-            <div className="empty-state">No orders loaded yet.</div>
+            <div className="rounded-xl border border-dashed border-[#d8d0c8] bg-[#faf5ee] px-4 py-6 text-sm text-[#78706a]">No orders loaded yet.</div>
           ) : (
             orders.map((order) => (
-              <article key={order._id} className="surface-muted" style={{ padding: "0.85rem" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    flexWrap: "wrap",
-                    gap: "0.6rem",
-                  }}
-                >
-                  <div className="stack-sm">
+              <article key={order._id} className="rounded-xl border border-[#d8d0c8] bg-[#f7f1e9] p-3 md:p-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="space-y-2">
                     <strong>Order {order._id.slice(-6).toUpperCase()}</strong>
-                    <span className="text-soft">Created {formatDate(order.createdAt)}</span>
-                    <span className="text-soft">Dealer: {getDealerLabel(order)}</span>
+                    <span className="text-sm text-[#605850]">Created {formatDate(order.createdAt)}</span>
+                    <span className="text-sm text-[#605850]">Dealer: {getDealerLabel(order)}</span>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.55rem", flexWrap: "wrap" }}>
+                  <div className="flex flex-wrap items-center gap-2">
                     <StatusBadge status={order.status} />
-                    <span className="text-soft">{formatCurrency(order.totalAmount)}</span>
+                    <span className="text-sm text-[#605850]">{formatCurrency(order.totalAmount)}</span>
                     {(order.status === "Approved" || order.status === "Dispatched") ? (
-                      <Link href={`/invoice/${order._id}?dealerId=${getDealerId(order)}`} className="btn btn-secondary">
+                      <Link href={`/invoice/${order._id}?dealerId=${getDealerId(order)}`} className="inline-flex items-center justify-center rounded-lg border border-[#d8d0c8] bg-white px-4 py-2 text-sm font-semibold text-[#3a302a] transition hover:bg-[#f2ece4] disabled:cursor-not-allowed disabled:opacity-60">
                         Invoice
                       </Link>
                     ) : null}
                   </div>
                 </div>
 
-                <div className="table-wrap" style={{ marginTop: "0.6rem" }}>
-                  <table>
+                <div className="mt-3 overflow-x-auto rounded-xl border border-[#d8d0c8]/70">
+                  <table className="min-w-full text-sm">
                     <thead>
                       <tr>
                         <th>Product</th>
@@ -206,8 +198,7 @@ export default function OrdersManagementPage() {
                             <td>{formatCurrency(item.unitPrice)}</td>
                             <td>
                               <input
-                                className="input"
-                                style={{ width: "130px" }}
+                                className="w-32 rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20"
                                 type="number"
                                 min={0}
                                 step="0.01"
@@ -234,8 +225,7 @@ export default function OrdersManagementPage() {
                 {order.status === "Pending" ? (
                   <button
                     type="button"
-                    className="btn btn-primary"
-                    style={{ marginTop: "0.6rem" }}
+                    className="mt-3 inline-flex items-center justify-center rounded-lg bg-[#c2652a] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
                     disabled={workingOrderId === order._id}
                     onClick={() => submitQuote(order)}
                   >
@@ -250,3 +240,4 @@ export default function OrdersManagementPage() {
     </AppShell>
   );
 }
+

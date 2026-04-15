@@ -27,6 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${headlineFont.variable} ${bodyFont.variable} h-full antialiased`}>
+      <head>
+        <meta name="theme-color" content="#F6EFE6" />
+      </head>
       <body className="min-h-full flex flex-col">
         <AuthProvider>{children}</AuthProvider>
       </body>

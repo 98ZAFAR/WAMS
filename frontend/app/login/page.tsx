@@ -44,57 +44,92 @@ export default function LoginPage() {
     }
   };
 
+  const fieldClass =
+    "w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-4 py-3 text-sm text-[#3a302a] placeholder:text-[#9a9088] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20";
+
   return (
-    <main className="page-wrap" style={{ padding: "1.4rem 0 2rem" }}>
-      <section className="surface" style={{ maxWidth: "560px", margin: "0 auto", padding: "1.6rem" }}>
-        <div className="stack-sm" style={{ marginBottom: "0.8rem" }}>
-          <p className="kicker">Precision in every movement, clarity in every byte</p>
-          <h1 className="headline" style={{ fontSize: "2.2rem" }}>
-            Welcome Back
-          </h1>
-          <p className="text-soft">Use your WAMS credentials to continue.</p>
+    <main className="flex min-h-screen items-center justify-center bg-[#faf5ee] px-4 py-10 md:px-8">
+      <section className="grid w-full max-w-6xl overflow-hidden rounded-2xl border border-[#d8d0c8]/60 bg-white shadow-[0_2px_16px_rgba(58,48,42,0.04)] md:grid-cols-2">
+        <div className="relative hidden bg-[#c2652a] p-12 text-white md:flex md:flex-col md:justify-between">
+          <div>
+            <p className="font-serif text-4xl font-bold italic">WAMS</p>
+            <p className="mt-1 text-sm font-medium text-[#fbe8d8]">Warehouse Automated Manufacturing System</p>
+          </div>
+
+          <div>
+            <h1 className="max-w-md font-serif text-4xl font-bold leading-tight">
+              Precision in every movement, clarity in every byte.
+            </h1>
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-[#fbe8d8]">
+              Manage industrial operations with a warm and modern interface designed for practical daily workflows.
+            </p>
+          </div>
+
+          <div className="absolute inset-0 bg-linear-to-t from-[#8a4518]/60 via-transparent to-transparent" />
         </div>
 
-        <form onSubmit={handleSubmit} className="stack-md">
-          <div className="field">
-            <label htmlFor="email">Email Address</label>
-            <input
-              id="email"
-              type="email"
-              className="input"
-              placeholder="name@company.com"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-            />
+        <div className="p-8 md:p-14">
+          <div className="mb-8">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#78706a]">
+              Precision in every movement
+            </p>
+            <h2 className="mt-2 font-serif text-4xl font-bold text-[#3a302a]">Welcome Back</h2>
+            <p className="mt-2 text-sm text-[#605850]">Use your WAMS credentials to continue.</p>
           </div>
 
-          <div className="field">
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              className="input"
-              placeholder="••••••••"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-xs font-semibold uppercase tracking-[0.15em] text-[#605850]">
+                Email Address
+              </label>
+              <input
+                id="email"
+                type="email"
+                className={fieldClass}
+                placeholder="name@company.com"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+              />
+            </div>
 
-          {error ? <div className="message error">{error}</div> : null}
+            <div className="space-y-2">
+              <label htmlFor="password" className="text-xs font-semibold uppercase tracking-[0.15em] text-[#605850]">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                className={fieldClass}
+                placeholder="••••••••"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                required
+              />
+            </div>
 
-          <button type="submit" className="btn btn-primary" disabled={submitting}>
-            {submitting ? "Signing in..." : "Login"}
-          </button>
-        </form>
+            {error ? (
+              <div className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
+                {error}
+              </div>
+            ) : null}
 
-        <p className="text-soft" style={{ marginTop: "0.9rem", fontSize: "0.9rem" }}>
-          New to WAMS?{" "}
-          <Link href="/register" style={{ color: "var(--color-primary-strong)" }}>
-            Create your account
-          </Link>
-        </p>
+            <button
+              type="submit"
+              className="w-full rounded-lg bg-[#c2652a] px-4 py-3 text-sm font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+              disabled={submitting}
+            >
+              {submitting ? "Signing in..." : "Sign In to Dashboard"}
+            </button>
+          </form>
+
+          <p className="mt-7 text-sm text-[#605850]">
+            New to WAMS?{" "}
+            <Link href="/register" className="font-semibold text-[#c2652a] hover:underline">
+              Create your account
+            </Link>
+          </p>
+        </div>
       </section>
     </main>
   );

@@ -87,11 +87,11 @@ export default function SuppliesPage() {
       title="Supplier Supplies"
       subtitle="Review supplier submissions and control approval/receiving states."
     >
-      <section className="surface" style={{ padding: "1rem" }}>
-        <form className="form-grid" onSubmit={loadSupplies}>
-          <div className="field" style={{ gridColumn: "span 4" }}>
+      <section className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-4 shadow-[0_2px_16px_rgba(58,48,42,0.04)] md:p-5">
+        <form className="grid gap-4 md:grid-cols-12" onSubmit={loadSupplies}>
+          <div className="space-y-2 md:col-span-4">
             <label htmlFor="status">Status</label>
-            <select id="status" className="select" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
+            <select id="status" className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
               <option value="">All</option>
               <option value="Pending">Pending</option>
               <option value="Approved">Approved</option>
@@ -99,33 +99,33 @@ export default function SuppliesPage() {
               <option value="Rejected">Rejected</option>
             </select>
           </div>
-          <div className="field" style={{ gridColumn: "span 6" }}>
+          <div className="space-y-2 md:col-span-6">
             <label htmlFor="supplierId">Supplier ID (Optional)</label>
             <input
               id="supplierId"
-              className="input"
+              className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20"
               value={supplierId}
               onChange={(event) => setSupplierId(event.target.value)}
               placeholder="Filter by supplier user id"
             />
           </div>
-          <div className="field" style={{ gridColumn: "span 2", alignSelf: "end" }}>
-            <button type="submit" className="btn btn-secondary">
+          <div className="space-y-2 md:col-span-2 md:self-end">
+            <button type="submit" className="inline-flex items-center justify-center rounded-lg border border-[#d8d0c8] bg-white px-4 py-2 text-sm font-semibold text-[#3a302a] transition hover:bg-[#f2ece4] disabled:cursor-not-allowed disabled:opacity-60">
               Filter
             </button>
           </div>
         </form>
 
-        {error ? <div className="message error" style={{ marginTop: "0.7rem" }}>{error}</div> : null}
-        {success ? <div className="message success" style={{ marginTop: "0.7rem" }}>{success}</div> : null}
+        {error ? <div className="mt-3 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</div> : null}
+        {success ? <div className="mt-3 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{success}</div> : null}
 
         {loading ? (
-          <p className="text-soft" style={{ marginTop: "0.75rem" }}>Loading supply requests...</p>
+          <p className="mt-3 text-sm text-[#605850]">Loading supply requests...</p>
         ) : supplies.length === 0 ? (
-          <div className="empty-state" style={{ marginTop: "0.75rem" }}>No supply requests found.</div>
+          <div className="mt-3 rounded-xl border border-dashed border-[#d8d0c8] bg-[#faf5ee] px-4 py-6 text-sm text-[#78706a]">No supply requests found.</div>
         ) : (
-          <div className="table-wrap" style={{ marginTop: "0.75rem" }}>
-            <table>
+          <div className="mt-3 overflow-x-auto rounded-xl border border-[#d8d0c8]/70">
+            <table className="min-w-full text-sm">
               <thead>
                 <tr>
                   <th>Request ID</th>
@@ -151,10 +151,10 @@ export default function SuppliesPage() {
                     </td>
                     <td>{formatDate(supply.expectedDeliveryDate)}</td>
                     <td>
-                      <div style={{ display: "flex", gap: "0.35rem", flexWrap: "wrap" }}>
+                      <div className="flex flex-wrap gap-2">
                         <button
                           type="button"
-                          className="btn btn-secondary"
+                          className="inline-flex items-center justify-center rounded-lg border border-[#d8d0c8] bg-white px-4 py-2 text-sm font-semibold text-[#3a302a] transition hover:bg-[#f2ece4] disabled:cursor-not-allowed disabled:opacity-60"
                           disabled={workingSupplyId === supply._id}
                           onClick={() => updateStatus(supply._id, "Approved")}
                         >
@@ -162,7 +162,7 @@ export default function SuppliesPage() {
                         </button>
                         <button
                           type="button"
-                          className="btn btn-secondary"
+                          className="inline-flex items-center justify-center rounded-lg border border-[#d8d0c8] bg-white px-4 py-2 text-sm font-semibold text-[#3a302a] transition hover:bg-[#f2ece4] disabled:cursor-not-allowed disabled:opacity-60"
                           disabled={workingSupplyId === supply._id}
                           onClick={() => updateStatus(supply._id, "Received")}
                         >
@@ -170,7 +170,7 @@ export default function SuppliesPage() {
                         </button>
                         <button
                           type="button"
-                          className="btn btn-ghost"
+                          className="inline-flex items-center justify-center rounded-lg px-3 py-1.5 text-sm font-medium text-[#8c3c3c] transition hover:bg-[#fbe8d8]"
                           disabled={workingSupplyId === supply._id}
                           onClick={() => updateStatus(supply._id, "Rejected")}
                         >
@@ -188,3 +188,4 @@ export default function SuppliesPage() {
     </AppShell>
   );
 }
+

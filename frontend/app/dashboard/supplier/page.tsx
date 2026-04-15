@@ -52,49 +52,49 @@ export default function SupplierDashboardPage() {
       title="Supplier Overview"
       subtitle="Track request lifecycle, low raw materials, and current production workload."
       actions={
-        <div style={{ display: "flex", gap: "0.55rem", flexWrap: "wrap" }}>
-          <Link href="/supplier/production" className="btn btn-primary">
+        <div className="flex flex-wrap gap-2">
+          <Link href="/supplier/production" className="inline-flex items-center justify-center rounded-lg bg-[#c2652a] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60">
             Production Orders
           </Link>
-          <Link href="/supplier/profile" className="btn btn-secondary">
+          <Link href="/supplier/profile" className="inline-flex items-center justify-center rounded-lg border border-[#d8d0c8] bg-white px-4 py-2 text-sm font-semibold text-[#3a302a] transition hover:bg-[#f2ece4] disabled:cursor-not-allowed disabled:opacity-60">
             Profile Settings
           </Link>
         </div>
       }
     >
-      {error ? <div className="message error">{error}</div> : null}
+      {error ? <div className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</div> : null}
 
-      <section className="kpi-grid">
-        <article className="surface kpi-card">
-          <div className="kicker">Total Requests</div>
-          <div className="kpi-value">{dashboard?.totalRequests || 0}</div>
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <article className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-5 shadow-[0_2px_16px_rgba(58,48,42,0.04)]">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#78706a]">Total Requests</div>
+          <div className="mt-2 font-serif text-3xl font-bold text-[#c2652a]">{dashboard?.totalRequests || 0}</div>
         </article>
-        <article className="surface kpi-card">
-          <div className="kicker">Pending</div>
-          <div className="kpi-value">{dashboard?.statusCounts.Pending || 0}</div>
+        <article className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-5 shadow-[0_2px_16px_rgba(58,48,42,0.04)]">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#78706a]">Pending</div>
+          <div className="mt-2 font-serif text-3xl font-bold text-[#c2652a]">{dashboard?.statusCounts.Pending || 0}</div>
         </article>
-        <article className="surface kpi-card">
-          <div className="kicker">Approved</div>
-          <div className="kpi-value">{dashboard?.statusCounts.Approved || 0}</div>
+        <article className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-5 shadow-[0_2px_16px_rgba(58,48,42,0.04)]">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#78706a]">Approved</div>
+          <div className="mt-2 font-serif text-3xl font-bold text-[#c2652a]">{dashboard?.statusCounts.Approved || 0}</div>
         </article>
-        <article className="surface kpi-card">
-          <div className="kicker">Received</div>
-          <div className="kpi-value">{dashboard?.statusCounts.Received || 0}</div>
+        <article className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-5 shadow-[0_2px_16px_rgba(58,48,42,0.04)]">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#78706a]">Received</div>
+          <div className="mt-2 font-serif text-3xl font-bold text-[#c2652a]">{dashboard?.statusCounts.Received || 0}</div>
         </article>
       </section>
 
-      <section className="split-grid">
-        <article className="surface" style={{ padding: "1rem" }}>
-          <h2 className="headline" style={{ fontSize: "1.45rem" }}>
+      <section className="grid gap-6 xl:grid-cols-[2fr_1fr]">
+        <article className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-4 shadow-[0_2px_16px_rgba(58,48,42,0.04)] md:p-5">
+          <h2 className="font-serif text-2xl font-bold text-[#3a302a]">
             Current Production
           </h2>
           {loading ? (
-            <p className="text-soft">Loading production requests...</p>
+            <p className="mt-3 text-sm text-[#605850]">Loading production requests...</p>
           ) : !dashboard?.latestSupplies.length ? (
-            <div className="empty-state">No supply requests yet.</div>
+            <div className="mt-3 rounded-xl border border-dashed border-[#d8d0c8] bg-[#faf5ee] px-4 py-6 text-sm text-[#78706a]">No supply requests yet.</div>
           ) : (
-            <div className="table-wrap" style={{ marginTop: "0.7rem" }}>
-              <table>
+            <div className="mt-3 overflow-x-auto rounded-xl border border-[#d8d0c8]/70">
+              <table className="min-w-full text-sm">
                 <thead>
                   <tr>
                     <th>Batch ID</th>
@@ -122,18 +122,18 @@ export default function SupplierDashboardPage() {
           )}
         </article>
 
-        <article className="surface" style={{ padding: "1rem" }}>
-          <h2 className="headline" style={{ fontSize: "1.45rem" }}>
+        <article className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-4 shadow-[0_2px_16px_rgba(58,48,42,0.04)] md:p-5">
+          <h2 className="font-serif text-2xl font-bold text-[#3a302a]">
             Resource Levels
           </h2>
-          <div className="stack-sm" style={{ marginTop: "0.7rem" }}>
+          <div className="mt-3 space-y-2">
             {!dashboard?.lowStockRawMaterials.length ? (
-              <div className="empty-state">No raw-material shortages detected.</div>
+              <div className="rounded-xl border border-dashed border-[#d8d0c8] bg-[#faf5ee] px-4 py-6 text-sm text-[#78706a]">No raw-material shortages detected.</div>
             ) : (
               dashboard.lowStockRawMaterials.map((material) => (
-                <div key={material._id} className="surface-muted" style={{ padding: "0.65rem" }}>
+                <div key={material._id} className="rounded-xl border border-[#d8d0c8] bg-[#f7f1e9] p-3">
                   <strong>{material.name}</strong>
-                  <p className="text-soft" style={{ margin: "0.2rem 0 0" }}>
+                  <p className="mt-1 text-sm text-[#605850]">
                     {material.currentStock} available, threshold {material.minThreshold}
                   </p>
                 </div>
@@ -145,3 +145,4 @@ export default function SupplierDashboardPage() {
     </AppShell>
   );
 }
+

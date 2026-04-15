@@ -141,25 +141,24 @@ export default function InventoryPage() {
       title="Inventory Control"
       subtitle="Create products, monitor thresholds, and update stock in real time."
     >
-      {error ? <div className="message error">{error}</div> : null}
-      {success ? <div className="message success">{success}</div> : null}
+      {error ? <div className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</div> : null}
+      {success ? <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{success}</div> : null}
 
-      <section className="split-grid">
-        <article className="surface" style={{ padding: "1rem" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", gap: "0.7rem", flexWrap: "wrap" }}>
-            <h2 className="headline" style={{ fontSize: "1.45rem" }}>
+      <section className="grid gap-6 xl:grid-cols-[2fr_1fr]">
+        <article className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-4 shadow-[0_2px_16px_rgba(58,48,42,0.04)] md:p-5">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <h2 className="font-serif text-2xl font-bold text-[#3a302a]">
               Product Catalog
             </h2>
-            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+            <div className="flex w-full flex-wrap gap-2 sm:w-auto">
               <input
-                className="input"
                 placeholder="Search inventory..."
-                style={{ width: "220px" }}
+                className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20 sm:w-56"
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
               />
               <select
-                className="select"
+                className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20 sm:w-44"
                 value={typeFilter}
                 onChange={(event) => setTypeFilter(event.target.value as "All" | "RawMaterial" | "FinishedGood")}
               >
@@ -171,14 +170,14 @@ export default function InventoryPage() {
           </div>
 
           {loading ? (
-            <p className="text-soft">Loading inventory table...</p>
+            <p className="mt-3 text-sm text-[#605850]">Loading inventory table...</p>
           ) : filteredProducts.length === 0 ? (
-            <div className="empty-state" style={{ marginTop: "0.8rem" }}>
+            <div className="mt-3 rounded-xl border border-dashed border-[#d8d0c8] bg-[#faf5ee] px-4 py-6 text-sm text-[#78706a]">
               No products match your filter.
             </div>
           ) : (
-            <div className="table-wrap" style={{ marginTop: "0.8rem" }}>
-              <table>
+            <div className="mt-3 overflow-x-auto rounded-xl border border-[#d8d0c8]/70">
+              <table className="min-w-full text-sm">
                 <thead>
                   <tr>
                     <th>Product Name</th>
@@ -202,9 +201,8 @@ export default function InventoryPage() {
                       <td>{product.minThreshold}</td>
                       <td>
                         <input
-                          className="input"
                           type="number"
-                          style={{ width: "105px" }}
+                          className="w-24 rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20"
                           value={stockChanges[product._id] || "0"}
                           onChange={(event) =>
                             setStockChanges((previous) => ({
@@ -217,7 +215,7 @@ export default function InventoryPage() {
                       <td>
                         <button
                           type="button"
-                          className="btn btn-secondary"
+                          className="inline-flex items-center justify-center rounded-lg border border-[#d8d0c8] bg-white px-4 py-2 text-sm font-semibold text-[#3a302a] transition hover:bg-[#f2ece4] disabled:cursor-not-allowed disabled:opacity-60"
                           onClick={() => applyStockChange(product._id)}
                         >
                           Update Stock
@@ -231,27 +229,27 @@ export default function InventoryPage() {
           )}
         </article>
 
-        <article className="surface" style={{ padding: "1rem" }}>
-          <h2 className="headline" style={{ fontSize: "1.45rem" }}>
+        <article className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-4 shadow-[0_2px_16px_rgba(58,48,42,0.04)] md:p-5">
+          <h2 className="font-serif text-2xl font-bold text-[#3a302a]">
             Add New Product
           </h2>
-          <form className="stack-md" style={{ marginTop: "0.8rem" }} onSubmit={addProduct}>
-            <div className="field">
+          <form className="mt-3 space-y-4" onSubmit={addProduct}>
+            <div className="space-y-2">
               <label htmlFor="name">Product Name</label>
-              <input id="name" className="input" value={name} onChange={(event) => setName(event.target.value)} required />
+              <input id="name" className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20" value={name} onChange={(event) => setName(event.target.value)} required />
             </div>
-            <div className="field">
+            <div className="space-y-2">
               <label htmlFor="type">Category</label>
-              <select id="type" className="select" value={type} onChange={(event) => setType(event.target.value as "RawMaterial" | "FinishedGood")}> 
+              <select id="type" className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20" value={type} onChange={(event) => setType(event.target.value as "RawMaterial" | "FinishedGood")}> 
                 <option value="RawMaterial">RawMaterial</option>
                 <option value="FinishedGood">FinishedGood</option>
               </select>
             </div>
-            <div className="field">
+            <div className="space-y-2">
               <label htmlFor="price">Unit Price</label>
               <input
                 id="price"
-                className="input"
+                className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20"
                 type="number"
                 min={0}
                 step="0.01"
@@ -260,11 +258,11 @@ export default function InventoryPage() {
                 required
               />
             </div>
-            <div className="field">
+            <div className="space-y-2">
               <label htmlFor="stock">Initial Stock</label>
               <input
                 id="stock"
-                className="input"
+                className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20"
                 type="number"
                 min={0}
                 value={currentStock}
@@ -272,11 +270,11 @@ export default function InventoryPage() {
                 required
               />
             </div>
-            <div className="field">
+            <div className="space-y-2">
               <label htmlFor="threshold">Alert Threshold</label>
               <input
                 id="threshold"
-                className="input"
+                className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20"
                 type="number"
                 min={0}
                 value={minThreshold}
@@ -285,7 +283,7 @@ export default function InventoryPage() {
               />
             </div>
 
-            <button type="submit" className="btn btn-primary" disabled={submitting}>
+            <button type="submit" className="inline-flex items-center justify-center rounded-lg bg-[#c2652a] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60" disabled={submitting}>
               {submitting ? "Saving..." : "Create Product"}
             </button>
           </form>
@@ -294,3 +292,4 @@ export default function InventoryPage() {
     </AppShell>
   );
 }
+

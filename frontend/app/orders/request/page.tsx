@@ -136,20 +136,20 @@ export default function OrderRequestPage() {
       title="Create Order Request"
       subtitle="Build your quote request from available inventory products."
     >
-      <section className="split-grid">
-        <article className="surface" style={{ padding: "1rem" }}>
-          <h2 className="headline" style={{ fontSize: "1.45rem" }}>
+      <section className="grid gap-6 xl:grid-cols-[2fr_1fr]">
+        <article className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-4 shadow-[0_2px_16px_rgba(58,48,42,0.04)] md:p-5">
+          <h2 className="font-serif text-2xl font-bold text-[#3a302a]">
             Product Selection
           </h2>
 
-          {loading ? <p className="text-soft">Loading inventory list...</p> : null}
+          {loading ? <p className="mt-3 text-sm text-[#605850]">Loading inventory list...</p> : null}
 
-          <div className="form-grid" style={{ marginTop: "0.8rem" }}>
-            <div className="field" style={{ gridColumn: "span 7" }}>
+          <div className="mt-3 grid gap-4 md:grid-cols-12">
+            <div className="space-y-2 md:col-span-7">
               <label htmlFor="product">Product Name</label>
               <select
                 id="product"
-                className="select"
+                className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20"
                 value={selectedProduct}
                 onChange={(event) => setSelectedProduct(event.target.value)}
               >
@@ -161,27 +161,27 @@ export default function OrderRequestPage() {
                 ))}
               </select>
             </div>
-            <div className="field" style={{ gridColumn: "span 3" }}>
+            <div className="space-y-2 md:col-span-3">
               <label htmlFor="qty">Quantity</label>
               <input
                 id="qty"
                 type="number"
                 min={1}
-                className="input"
+                className="w-full rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20"
                 value={quantity}
                 onChange={(event) => setQuantity(Number(event.target.value) || 1)}
               />
             </div>
-            <div className="field" style={{ gridColumn: "span 2", alignSelf: "end" }}>
-              <button type="button" className="btn btn-secondary" onClick={addLineItem}>
+            <div className="space-y-2 md:col-span-2 md:self-end">
+              <button type="button" className="inline-flex items-center justify-center rounded-lg border border-[#d8d0c8] bg-white px-4 py-2 text-sm font-semibold text-[#3a302a] transition hover:bg-[#f2ece4] disabled:cursor-not-allowed disabled:opacity-60" onClick={addLineItem}>
                 Add
               </button>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="stack-md" style={{ marginTop: "0.9rem" }}>
-            <div className="table-wrap">
-              <table>
+          <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+            <div className="overflow-x-auto rounded-xl border border-[#d8d0c8]/70">
+              <table className="min-w-full text-sm">
                 <thead>
                   <tr>
                     <th>Product Name</th>
@@ -194,7 +194,7 @@ export default function OrderRequestPage() {
                   {items.length === 0 ? (
                     <tr>
                       <td colSpan={4}>
-                        <div className="empty-state">No line items yet.</div>
+                        <div className="rounded-xl border border-dashed border-[#d8d0c8] bg-[#faf5ee] px-4 py-6 text-sm text-[#78706a]">No line items yet.</div>
                       </td>
                     </tr>
                   ) : (
@@ -210,7 +210,7 @@ export default function OrderRequestPage() {
                           <td>
                             <button
                               type="button"
-                              className="btn btn-ghost"
+                              className="inline-flex items-center justify-center rounded-lg px-3 py-1.5 text-sm font-medium text-[#8c3c3c] transition hover:bg-[#fbe8d8]"
                               onClick={() => removeItem(item.product)}
                             >
                               Delete
@@ -224,37 +224,37 @@ export default function OrderRequestPage() {
               </table>
             </div>
 
-            <div className="field">
+            <div className="space-y-2">
               <label htmlFor="notes">Handling Instructions</label>
               <textarea
                 id="notes"
-                className="textarea"
+                className="w-full min-h-30 rounded-lg border border-[#d8d0c8] bg-[#faf5ee] px-3 py-2 text-sm text-[#3a302a] outline-none transition focus:border-[#c2652a] focus:ring-2 focus:ring-[#c2652a]/20"
                 value={handlingNotes}
                 onChange={(event) => setHandlingNotes(event.target.value)}
                 placeholder="Special handling notes, delivery windows, or packaging requirements..."
               />
             </div>
 
-            {error ? <div className="message error">{error}</div> : null}
-            {success ? <div className="message success">{success}</div> : null}
+            {error ? <div className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</div> : null}
+            {success ? <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{success}</div> : null}
 
-            <button type="submit" className="btn btn-primary" disabled={submitting || items.length === 0}>
+            <button type="submit" className="inline-flex items-center justify-center rounded-lg bg-[#c2652a] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60" disabled={submitting || items.length === 0}>
               {submitting ? "Submitting..." : "Submit Order Request"}
             </button>
           </form>
         </article>
 
-        <article className="surface" style={{ padding: "1rem" }}>
-          <h2 className="headline" style={{ fontSize: "1.45rem" }}>
+        <article className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-4 shadow-[0_2px_16px_rgba(58,48,42,0.04)] md:p-5">
+          <h2 className="font-serif text-2xl font-bold text-[#3a302a]">
             Request Summary
           </h2>
-          <div className="stack-sm" style={{ marginTop: "0.7rem" }}>
-            <div className="surface-muted" style={{ padding: "0.75rem" }}>
-              <p className="kicker">Distinct Items</p>
+          <div className="mt-3 space-y-2">
+            <div className="rounded-xl border border-[#d8d0c8] bg-[#f7f1e9] p-3">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#78706a]">Distinct Items</p>
               <strong>{items.length}</strong>
             </div>
-            <div className="surface-muted" style={{ padding: "0.75rem" }}>
-              <p className="kicker">Estimated Total</p>
+            <div className="rounded-xl border border-[#d8d0c8] bg-[#f7f1e9] p-3">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#78706a]">Estimated Total</p>
               <strong>{formatCurrency(total)}</strong>
             </div>
           </div>
@@ -263,3 +263,4 @@ export default function OrderRequestPage() {
     </AppShell>
   );
 }
+

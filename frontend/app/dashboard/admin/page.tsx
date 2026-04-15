@@ -85,58 +85,58 @@ export default function AdminDashboardPage() {
       title="Admin Dashboard"
       subtitle="Sales visibility, forecast risk, and supply-chain review in one place."
       actions={
-        <div style={{ display: "flex", gap: "0.55rem", flexWrap: "wrap" }}>
-          <Link href="/inventory" className="btn btn-primary">
+        <div className="flex flex-wrap gap-2">
+          <Link href="/inventory" className="inline-flex items-center justify-center rounded-lg bg-[#c2652a] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60">
             Manage Inventory
           </Link>
-          <Link href="/orders/manage" className="btn btn-secondary">
+          <Link href="/orders/manage" className="inline-flex items-center justify-center rounded-lg border border-[#d8d0c8] bg-white px-4 py-2 text-sm font-semibold text-[#3a302a] transition hover:bg-[#f2ece4] disabled:cursor-not-allowed disabled:opacity-60">
             Manage Quotes
           </Link>
-          <Link href="/supplies" className="btn btn-secondary">
+          <Link href="/supplies" className="inline-flex items-center justify-center rounded-lg border border-[#d8d0c8] bg-white px-4 py-2 text-sm font-semibold text-[#3a302a] transition hover:bg-[#f2ece4] disabled:cursor-not-allowed disabled:opacity-60">
             Review Supplies
           </Link>
         </div>
       }
     >
-      {error ? <div className="message error">{error}</div> : null}
+      {error ? <div className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</div> : null}
 
-      <section className="kpi-grid">
-        <article className="surface kpi-card">
-          <div className="kicker">Sales Revenue</div>
-          <div className="kpi-value">{formatCurrency(totalRevenue)}</div>
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <article className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-5 shadow-[0_2px_16px_rgba(58,48,42,0.04)]">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#78706a]">Sales Revenue</div>
+          <div className="mt-2 font-serif text-3xl font-bold text-[#c2652a]">{formatCurrency(totalRevenue)}</div>
         </article>
-        <article className="surface kpi-card">
-          <div className="kicker">Forecast High Risk</div>
-          <div className="kpi-value">{highRiskCount}</div>
+        <article className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-5 shadow-[0_2px_16px_rgba(58,48,42,0.04)]">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#78706a]">Forecast High Risk</div>
+          <div className="mt-2 font-serif text-3xl font-bold text-[#c2652a]">{highRiskCount}</div>
         </article>
-        <article className="surface kpi-card">
-          <div className="kicker">Pending Supply Requests</div>
-          <div className="kpi-value">{pendingSupplies}</div>
+        <article className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-5 shadow-[0_2px_16px_rgba(58,48,42,0.04)]">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#78706a]">Pending Supply Requests</div>
+          <div className="mt-2 font-serif text-3xl font-bold text-[#c2652a]">{pendingSupplies}</div>
         </article>
-        <article className="surface kpi-card">
-          <div className="kicker">Top Product</div>
-          <div className="kpi-value" style={{ fontSize: "1.3rem" }}>
+        <article className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-5 shadow-[0_2px_16px_rgba(58,48,42,0.04)]">
+          <div className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[#78706a]">Top Product</div>
+          <div className="mt-2 font-serif text-xl font-bold text-[#c2652a]">
             {topProduct?.productName || "-"}
           </div>
         </article>
       </section>
 
-      <section className="split-grid">
-        <article className="surface" style={{ padding: "1rem" }}>
-          <h2 className="headline" style={{ fontSize: "1.45rem" }}>
+      <section className="grid gap-6 xl:grid-cols-[2fr_1fr]">
+        <article className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-4 shadow-[0_2px_16px_rgba(58,48,42,0.04)] md:p-5">
+          <h2 className="font-serif text-2xl font-bold text-[#3a302a]">
             Sales Overview
           </h2>
           {loading ? (
-            <p className="text-soft">Loading sales report...</p>
+            <p className="mt-3 text-sm text-[#605850]">Loading sales report...</p>
           ) : sales.length === 0 ? (
-            <div className="empty-state">No approved orders yet for sales analytics.</div>
+            <div className="mt-3 rounded-xl border border-dashed border-[#d8d0c8] bg-[#faf5ee] px-4 py-6 text-sm text-[#78706a]">No approved orders yet for sales analytics.</div>
           ) : (
-            <div className="stack-md" style={{ marginTop: "0.8rem" }}>
+            <div className="mt-3 space-y-4">
               {sales.slice(0, 7).map((row) => (
-                <div key={row.productId} className="surface-muted" style={{ padding: "0.55rem 0.7rem" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: "0.6rem", flexWrap: "wrap" }}>
+                <div key={row.productId} className="rounded-xl border border-[#d8d0c8] bg-[#f7f1e9] px-3 py-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
                     <strong>{row.productName || "Unnamed product"}</strong>
-                    <span className="text-soft">{formatCurrency(row.totalRevenue)}</span>
+                    <span className="text-sm text-[#605850]">{formatCurrency(row.totalRevenue)}</span>
                   </div>
                   <div
                     style={{
@@ -162,25 +162,25 @@ export default function AdminDashboardPage() {
           )}
         </article>
 
-        <article className="surface" style={{ padding: "1rem" }}>
-          <h2 className="headline" style={{ fontSize: "1.45rem" }}>
+        <article className="rounded-2xl border border-[#d8d0c8]/60 bg-white p-4 shadow-[0_2px_16px_rgba(58,48,42,0.04)] md:p-5">
+          <h2 className="font-serif text-2xl font-bold text-[#3a302a]">
             Optimization Tip
           </h2>
-          <div className="stack-sm" style={{ marginTop: "0.8rem" }}>
+          <div className="mt-3 space-y-2">
             {(forecast?.forecast || []).slice(0, 5).map((row) => (
-              <div key={row.productId} className="surface-muted" style={{ padding: "0.6rem" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", gap: "0.55rem", flexWrap: "wrap" }}>
+              <div key={row.productId} className="rounded-xl border border-[#d8d0c8] bg-[#f7f1e9] p-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                   <strong>{row.productName}</strong>
                   <StatusBadge status={row.risk} />
                 </div>
-                <p className="text-soft" style={{ margin: "0.2rem 0 0" }}>
+                <p className="mt-1 text-sm text-[#605850]">
                   Recommended restock: {row.recommendedRestock}
                 </p>
               </div>
             ))}
 
             {!forecast?.forecast.length ? (
-              <div className="empty-state">Forecast data appears after approved/dispatched order history grows.</div>
+              <div className="rounded-xl border border-dashed border-[#d8d0c8] bg-[#faf5ee] px-4 py-6 text-sm text-[#78706a]">Forecast data appears after approved/dispatched order history grows.</div>
             ) : null}
           </div>
         </article>
@@ -188,3 +188,4 @@ export default function AdminDashboardPage() {
     </AppShell>
   );
 }
+
